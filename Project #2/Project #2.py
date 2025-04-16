@@ -15,7 +15,7 @@ def highest_prime_calculation():
     highest_prime = 0
     n = 0
     start_time = time.time()
-    while time.time() - start_time() <= 180:
+    while time.time() - start_time <= 180:
         if is_prime(n):
             highest_prime = n
         n += 1
@@ -23,7 +23,7 @@ def highest_prime_calculation():
 
 async def asynchronous_calc():
     loop = asyncio.get_event_loop()
-    await loop.run_in_executor(None,highest_prime_calculation)
+    return await loop.run_in_executor(None, highest_prime_calculation)
 
 async def main():
     async_prime = await asynchronous_calc()
