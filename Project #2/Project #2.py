@@ -2,6 +2,7 @@ import asyncio
 import multiprocessing
 import threading
 import time
+import math
 
 def is_prime(n):
     if n <= 1:
@@ -34,6 +35,19 @@ def fibonacci_calc(n):
     else:
         return nth_term
     
+def factorial_calc(n):
+    num = 0
+    factorial = 1
+    while factorial <= n:
+        if factorial == n:
+            return num
+        num += 1
+        factorial = math.factorial(num)
+    if abs(n - math.factorial(num - 1)) <= abs(n - factorial):
+        return num - 1
+    else:
+        return num
+    
 async def async_calc():
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, highest_prime_calc)
@@ -41,8 +55,12 @@ async def async_calc():
 async def main():
     async_prime = await async_calc()
     print(f"Async Highest Prime: {async_prime}")
-    nth_term = fibonacci_calc(async_prime)
+    loop = asyncio.get_event_loop()
+    fibonacci = loop.run_in_executor(None, fibonacci_calc, async_prime)
+    factorial = loop.run_in_executor(None, factorial_calc, async_prime)
+    nth_term, num = await asyncio.gather(fibonacci, factorial)
     print(f"Closest Fibonacci Number is {nth_term}")
+    print(f"Closest Factorial is {num}")
 
 if __name__ == "__main__":
     asyncio.run(main())
