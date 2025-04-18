@@ -47,13 +47,10 @@ def factorial_calc(n):
         return num - 1
     else:
         return num
-    
-async def async_calc():
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, highest_prime_calc)
 
 async def main():
-    async_prime = await async_calc()
+    loop = asyncio.get_event_loop()
+    async_prime = await loop.run_in_executor(None, highest_prime_calc)
     print(f"Async Highest Prime: {async_prime}")
     loop = asyncio.get_event_loop()
     fibonacci = loop.run_in_executor(None, fibonacci_calc, async_prime)
