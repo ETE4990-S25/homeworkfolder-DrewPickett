@@ -59,5 +59,17 @@ async def main():
     print(f"Closest Fibonacci Number is {nth_term}")
     print(f"Closest Factorial is {num}")
 
+def thread_main():
+    prime = None
+    def worker():
+        nonlocal prime
+        prime = highest_prime_calc()
+    thread_prime = threading.Thread(target = worker)
+    thread_prime.start()
+    thread_prime.join()
+    print(f"Thread Highest Prime: {prime}")
+
 if __name__ == "__main__":
     asyncio.run(main())
+    print()
+    thread_main()
