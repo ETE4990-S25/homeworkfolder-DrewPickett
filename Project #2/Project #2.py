@@ -11,7 +11,7 @@ def is_prime(n):
             return False
     return True
 
-def highest_prime_calculation():
+def highest_prime_calc():
     highest_prime = 0
     n = 0
     start_time = time.time()
@@ -21,13 +21,28 @@ def highest_prime_calculation():
         n += 1
     return highest_prime
 
-async def asynchronous_calc():
+def fibonacci_calc(n):
+    a, b = 0, 1
+    nth_term = 0
+    while a <= n:
+        if a == n:
+            return nth_term
+        a, b = b, a + b
+        nth_term += 1
+    if abs(n - (b - a)) <= abs(n - a):
+        return nth_term - 1
+    else:
+        return nth_term
+    
+async def async_calc():
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, highest_prime_calculation)
+    return await loop.run_in_executor(None, highest_prime_calc)
 
 async def main():
-    async_prime = await asynchronous_calc()
+    async_prime = await async_calc()
     print(f"Async Highest Prime: {async_prime}")
+    nth_term = fibonacci_calc(async_prime)
+    print(f"Closest Fibonacci Number is {nth_term}")
 
 if __name__ == "__main__":
     asyncio.run(main())
