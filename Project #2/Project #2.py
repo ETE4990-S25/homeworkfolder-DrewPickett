@@ -68,7 +68,23 @@ def thread_main():
     thread_prime.start()
     thread_prime.join()
     print(f"Thread Highest Prime: {prime}")
-
+    fibonacci = None
+    def worker_1(prime):
+        nonlocal fibonacci 
+        fibonacci = fibonacci_calc(prime)
+    thread_fibonacci = threading.Thread(target = worker_1, args = (prime,))
+    factorial = None
+    def worker_2(prime):
+        nonlocal factorial
+        factorial = factorial_calc(prime)
+    thread_factorial = threading.Thread(target = worker_2, args = (prime,))
+    thread_fibonacci.start()
+    thread_factorial.start()
+    thread_fibonacci.join()
+    thread_factorial.join()
+    print(f"Closest Fibonacci Number is {fibonacci}")
+    print(f"Closest Factorial is {factorial}")
+    
 if __name__ == "__main__":
     asyncio.run(main())
     print()
