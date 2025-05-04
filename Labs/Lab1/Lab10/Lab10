@@ -1,1 +1,43 @@
+import docker
+import time
 
+client = docker.from_env()
+
+def list_running_containers():
+    containers = client.containers.list(all=True)
+    for container in containers:
+        print(f"{container.name} - {container.status}")
+
+def show_container_ip(container_name):
+    container = client.containers.get(container_name)
+    networks = container.attrs['NetworkSettings']['Networks']
+    
+    for net_name, net_data in networks.items():
+        if net_data['IPAddress']:
+            print(f"{container_name} in network '{net_name}' has IP: {net_data['IPAddress']}")
+        else:
+            print(f"{container_name} in network '{net_name}' has no IP")
+
+def relaunch_containers():
+    containers = client.containers.list(all=True)
+
+    for container in containers:
+        if container.status == 'exited':
+            print(f"Relaunching {container.name}")
+            container.restart()
+
+def maintenance_restart_containers():
+    containers = client.containers.list(all=True)
+    start_time = container.attrs['State']['StartedAt']
+    current_time = time.time()
+    
+    for container in containers:
+        if current_time - start_time >= 86400:
+            print(f"Performing Maintenance Restart on {container.name}")
+            container.restart()
+        
+
+list_running_containers()
+show_container_ip("adminer")
+show_container_ip("mysql")
+relaunch_containers()
