@@ -21,7 +21,10 @@ def show_container_ip(container_name):
 
 def relaunch_containers():
     containers = client.containers.list(all=True)
-
+    if not containers:
+        print("No containers to relaunch.")
+        return
+    
     for container in containers:
         if container.status == 'exited':
             print(f"Relaunching {container.name}")
@@ -29,6 +32,9 @@ def relaunch_containers():
 
 def maintenance_restart_containers():
     containers = client.containers.list(all=True)
+    if not containers:
+        print("No containers to restart.")
+        return
     
     for container in containers:
         container_time_string = container.attrs['State']['StartedAt'][:19]
@@ -41,9 +47,13 @@ def maintenance_restart_containers():
         if current_time - start_time >= 86400:
             print(f"Performing Maintenance Restart on {container.name}")
             container.restart()
-        
-list_running_containers()
-show_container_ip("adminer")
-show_container_ip("mysql")
-relaunch_containers()
-maintenance_restart_containers()
+
+def main():     
+    list_running_containers()
+    show_container_ip("adminer")
+    show_container_ip("mysql")
+    relaunch_containers()
+    maintenance_restart_containers()
+
+if __name__ == "__main__":
+    main()
