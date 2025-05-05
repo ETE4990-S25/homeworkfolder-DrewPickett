@@ -1,5 +1,6 @@
 import docker
 import time
+from datetime import datetime, timezone
 
 client = docker.from_env()
 
@@ -28,16 +29,21 @@ def relaunch_containers():
 
 def maintenance_restart_containers():
     containers = client.containers.list(all=True)
-    start_time = container.attrs['State']['StartedAt']
-    current_time = time.time()
     
     for container in containers:
+        container_time_string = container.attrs['State']['StartedAt'][:19]
+        container_time_object = datetime.strptime(container_time_string, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+        start_time = container_time_object.timestamp()
+        current_time = time.time()
+        print(f"{container.name} uptime: {current_time - start_time:.2f} seconds")
+        #I had to research how to code lines 34 - 38 to properly extract the time data from the docker containers and format it
+
         if current_time - start_time >= 86400:
             print(f"Performing Maintenance Restart on {container.name}")
             container.restart()
         
-
 list_running_containers()
 show_container_ip("adminer")
 show_container_ip("mysql")
 relaunch_containers()
+maintenance_restart_containers()
