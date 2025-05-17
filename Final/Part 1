@@ -25,7 +25,10 @@ THREAD_POOL_SIZE = 10
 def download(base, start_date, end_date,):
     date_str = date_obj.strftime("%Y-%m-%d")
     file = os.path.join(output_folder, f"{date}.json")
-        
+    
+    if os.path.exists(file):
+        return
+    
         # URL of the XML data
     url = f"https://www.floatrates.com/historical-exchange-rates.html?operation=rates&pb_id=1775&page=historical&currency_date={current_date}&base_currency_code={base}&format_type=xml"
     try:
