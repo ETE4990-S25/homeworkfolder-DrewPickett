@@ -81,5 +81,5 @@ def threaded_pool():
     while threads:
         threads.pop().join
 
-data = download(base, start_date, end_date)
-save(data, start_date, end_date)
+if __name__ == "__main__":
+    threaded_pool()
