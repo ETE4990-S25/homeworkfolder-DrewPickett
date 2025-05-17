@@ -22,7 +22,7 @@ os.makedirs(output_folder, exist_ok=True)
 
 THREAD_POOL_SIZE = 10
 
-def download(base, start_date, end_date,):
+def download(date_obj):
     date_str = date_obj.strftime("%Y-%m-%d")
     file = os.path.join(output_folder, f"{date}.json")
     
