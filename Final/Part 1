@@ -87,5 +87,35 @@ def threaded_pool():
     while threads:
         threads.pop().join
 
+def parser(input_folder, output_folder):
+    os.makedirs(output_folder, exist_ok=True)
+    sorted_data = {}
+
+    for filename in (os.listdir(input_folder)):
+        filepath = os.path.join(input_folder, filename)
+        with open(filepath, "r") as f:
+            try:
+                data = json.load(f)
+            except Exception:
+                pass
+        
+        date_str = filename[:-5]
+        items = data.get("rss", {}).get("channel", {}).get("item", [])
+
+        for item in items:
+            currency = item.get("targetCurrency")
+            rate = item.get("exchangeRate")
+
+            sorted_data[currency].append({
+                "date": date_str,
+                "exchange rate": rate
+            })
+
+    for currency, history in sorted_data.items():
+        sorted_output_folder = os.path.join(output_folder, f"{currency}.json")
+        with open(sorted_output_folder, "w") as f:
+            json.dump(history, f, indent=4)
+
 if __name__ == "__main__":
     threaded_pool()
+    parser(output_folder, "parsed_data")
