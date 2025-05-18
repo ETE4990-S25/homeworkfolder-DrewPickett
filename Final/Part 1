@@ -17,7 +17,7 @@ base = random.choice(ratesForBase)
 start_date = datetime.strptime("2011-05-04", "%Y-%m-%d").date()
 end_date = date.today()
 
-folder = os.path.dirname(os.path.abspath(__file__))
+folder = os.getcwd()
 output_folder = os.path.join(folder, f"{base}_exchange_rate_data")
 os.makedirs(output_folder, exist_ok=True)
 
