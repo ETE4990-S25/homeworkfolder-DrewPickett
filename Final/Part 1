@@ -97,14 +97,20 @@ def parser(input_folder, output_folder):
             try:
                 data = json.load(f)
             except Exception:
-                pass
+                continue
         
         date_str = filename[:-5]
         items = data.get("rss", {}).get("channel", {}).get("item", [])
 
         for item in items:
             currency = item.get("targetCurrency")
-            rate = item.get("exchangeRate")
+            try:    
+                rate = float(item.get("exchangeRate"))
+            except Exception:
+                continue
+
+            if currency not in sorted_data:
+                            sorted_data[currency] = []
 
             sorted_data[currency].append({
                 "date": date_str,
