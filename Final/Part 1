@@ -17,7 +17,8 @@ base = random.choice(ratesForBase)
 start_date = datetime.strptime("2011-05-04", "%Y-%m-%d").date()
 end_date = date.today()
 
-output_folder = f"{base}_exchange_rate_data"
+folder = os.path.dirname(os.path.abspath(__file__))
+output_folder = os.path.join(folder, f"{base}_exchange_rate_data")
 os.makedirs(output_folder, exist_ok=True)
 
 THREAD_POOL_SIZE = 10
